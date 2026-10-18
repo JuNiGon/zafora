@@ -1,0 +1,85 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- Funções auxiliares ----------
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // Administrador = existe o documento admins/{uid} (criado manualmente no console).
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function validProduct(p) {
+      return p.keys().hasAll(['name', 'slug', 'price', 'category', 'description', 'sizes', 'visible'])
+        && p.name is string && p.name.size() > 0 && p.name.size() <= 120
+        && p.slug is string && p.slug.matches('^[a-z0-9-]{1,80}$')
+        && p.price is number && p.price >= 0
+        && p.category is string && p.category.size() <= 60
+        && p.description is string && p.description.size() <= 2000
+        && p.sizes is list && p.sizes.size() <= 30
+        && p.visible is bool
+        // Miniatura comprimida (data URL) usada nas listagens.
+        && (!('cover' in p) || (p.cover is string && p.cover.size() <= 100000));
+    }
+
+    // ---------- Produtos ----------
+    // Público lê apenas produtos visíveis; o admin lê, cria, edita e exclui todos.
+    match /products/{productId} {
+      allow read: if resource.data.visible == true || isAdmin();
+      allow create, update: if isAdmin() && validProduct(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // ---------- Galeria de fotos (plano gratuito: fotos comprimidas no Firestore) ----------
+    // Leitura liberada se o produto estiver visível; o admin lê e grava tudo.
+    match /productImages/{productId} {
+      allow read: if isAdmin()
+        || get(/databases/$(database)/documents/products/$(productId)).data.visible == true;
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['images', 'updatedAt'])
+        && request.resource.data.images is list
+        && request.resource.data.images.size() <= 5;
+      allow delete: if isAdmin();
+    }
+
+    // ---------- Perfis de clientes ----------
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create, update: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['name', 'email', 'phone', 'createdAt', 'updatedAt'])
+        && (!('name' in request.resource.data) || (request.resource.data.name is string && request.resource.data.name.size() <= 120))
+        && (!('phone' in request.resource.data) || (request.resource.data.phone is string && request.resource.data.phone.size() <= 30));
+      allow delete: if false;
+    }
+
+    // ---------- Carrinho sincronizado ----------
+    match /carts/{uid} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['items', 'updatedAt'])
+        && request.resource.data.items is list
+        && request.resource.data.items.size() <= 100;
+    }
+
+    // ---------- Administradores ----------
+    // Cada usuário só consegue verificar o próprio documento. Ninguém escreve pelo app.
+    match /admins/{uid} {
+      allow read: if isOwner(uid);
+      allow write: if false;
+    }
+
+    // Qualquer outra coleção fica bloqueada.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
