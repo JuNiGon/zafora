@@ -5,13 +5,13 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDnZeCj5H9rnvtk87tPI4OarGXFkXZejdo",
-  authDomain: "zafora-d0d33.firebaseapp.com",
-  projectId: "zafora-d0d33",
-  storageBucket: "zafora-d0d33.firebasestorage.app",
-  messagingSenderId: "464771938273",
-  appId: "1:464771938273:web:32c4789cc266b19dfd44a0",
-  measurementId: "G-9YSQ2PFG62",
+  apiKey: import.meta.env["VITE_FIREBASE_API_KEY"],
+  authDomain: import.meta.env["VITE_FIREBASE_AUTH_DOMAIN"],
+  projectId: import.meta.env["VITE_FIREBASE_PROJECT_ID"],
+  storageBucket: import.meta.env["VITE_FIREBASE_STORAGE_BUCKET"],
+  messagingSenderId: import.meta.env["VITE_FIREBASE_MESSAGING_SENDER_ID"],
+  appId: import.meta.env["VITE_FIREBASE_APP_ID"],
+  measurementId: import.meta.env["VITE_FIREBASE_MEASUREMENT_ID"],
 };
 
 const app = initializeApp(firebaseConfig);
