@@ -16,8 +16,8 @@ export const orderTotal = (items: OrderLine[]) =>
 export function buildOrderMessage(items: OrderLine[], customer?: Customer) {
   const lines: string[] = ["Olá, Záfora! Gostaria de finalizar o seguinte pedido:", ""];
 
-  if (customer?.name) {
-    lines.push(`*Cliente:* ${customer.name}`);
+  if (customer?.name || customer?.email) {
+    if (customer.name) lines.push(`*Cliente:* ${customer.name}`);
     if (customer.email) lines.push(`*E-mail:* ${customer.email}`);
     if (customer.phone) lines.push(`*Telefone:* ${customer.phone}`);
     lines.push("");

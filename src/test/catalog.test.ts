@@ -92,7 +92,7 @@ describe("Pedido pelo WhatsApp", () => {
 
   it("usa o número oficial e codifica a mensagem", () => {
     const url = orderWhatsappUrl(items, { name: "Ana" });
-    expect(url).toBe(`https://wa.me/5582988487506?text=${encodeURIComponent(buildOrderMessage(items, { name: "Ana" }))}`);
+    expect(url).toBe(`https://wa.me/558293097204?text=${encodeURIComponent(buildOrderMessage(items, { name: "Ana" }))}`);
   });
 
   it("não cria link para número inválido", () => {

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowUpRight, Instagram, MessageCircle } from "lucide-react";
-import editorial from "@/assets/brand-editorial.jpg";
+import { ArrowUpRight, Instagram, MapPin, MessageCircle } from "lucide-react";
+import storeInterior from "@/assets/loja-interior.jpg";
 import { brand, whatsappUrl } from "@/data/config";
 import { pageHead } from "@/data/seo";
 import { Button } from "@/components/ui/button";
@@ -30,11 +30,11 @@ function Contact() {
       </div>
       <div className="contact-layout">
         <img
-          className="contact-photo"
-          src={editorial}
-          alt="Editorial de moda Záfora em meio à natureza"
-          width={1536}
-          height={1024}
+          className="contact-photo store-photo"
+          src={storeInterior}
+          alt="Interior da loja Záfora, com araras de vestidos coloridos e vitrine de acessórios"
+          width={1086}
+          height={1448}
         />
         <div className="contact-copy">
           <h2>
@@ -58,13 +58,24 @@ function Contact() {
             <div>
               <h3>Atendimento</h3>
               <p>{brand.serviceHours || "Respondemos pelo WhatsApp o mais breve possível."}</p>
+              {url && (
+                <a className="text-link mt-3" href={url} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle size={16} /> WhatsApp {brand.whatsappDisplay} <ArrowUpRight size={14} />
+                </a>
+              )}
+            </div>
+            <div>
+              <h3>Endereço</h3>
+              <a className="text-link" href={brand.mapsUrl} target="_blank" rel="noopener noreferrer">
+                <MapPin size={16} /> {brand.address} <ArrowUpRight size={14} />
+              </a>
             </div>
             {(brand.instagramUrl || brand.pinterestUrl) && (
               <div>
                 <h3>Acompanhe a Záfora</h3>
                 {brand.instagramUrl && (
                   <a className="text-link" href={brand.instagramUrl} target="_blank" rel="noopener noreferrer">
-                    <Instagram size={16} /> Instagram <ArrowUpRight size={14} />
+                    <Instagram size={16} /> {brand.instagramHandle} <ArrowUpRight size={14} />
                   </a>
                 )}
                 {brand.pinterestUrl && (

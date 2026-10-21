@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import hero from "@/assets/editorial-hero.jpg";
-import editorial from "@/assets/brand-editorial.jpg";
+import storeWindow from "@/assets/loja-vitrine.jpg";
 import { Button } from "@/components/ui/button";
 import {
   availableCategories,
@@ -113,7 +113,14 @@ function Index() {
       </section>
 
       <section className="editorial-band">
-        <img src={editorial} alt="Modelo com conjunto de linho em cenário natural" width={1536} height={1024} loading="lazy" />
+        <img
+          className="store-photo store-photo--window"
+          src={storeWindow}
+          alt="Vitrine da loja Záfora com vestidos em laranja e verde-oliva"
+          width={1149}
+          height={1369}
+          loading="lazy"
+        />
         <div className="editorial-copy">
           <span className="eyebrow text-muted-foreground">A essência Záfora</span>
           <h2>

@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageLoader } from "@/components/store/layout";
 import { GoogleIcon } from "@/components/auth/google-icon";
+import { PasswordInput } from "@/components/auth/password-input";
 import { authErrorMessage, useAuth } from "@/contexts/auth";
 import { privateHead } from "@/data/seo";
 
@@ -34,11 +35,12 @@ function LoginPage() {
   const destination = redirect ?? "/conta";
 
   // Já autenticado (ou login concluído): segue para o destino.
+  // Durante o cadastro espera o nome ser salvo antes de sair da página.
   useEffect(() => {
-    if (!loading && user) router.history.replace(destination);
-  }, [loading, user, destination, router]);
+    if (!loading && user && !busy) router.history.replace(destination);
+  }, [loading, user, busy, destination, router]);
 
-  if (loading || user) return <PageLoader />;
+  if (loading || (user && !busy)) return <PageLoader />;
 
   async function run(action: () => Promise<void>, success?: string) {
     setBusy(true);
@@ -142,7 +144,7 @@ function LoginPage() {
               </div>
               <div className="field">
                 <Label htmlFor="login-password">Senha</Label>
-                <Input id="login-password" name="password" type="password" autoComplete="current-password" required />
+                <PasswordInput id="login-password" name="password" autoComplete="current-password" required />
               </div>
               <Button type="submit" size="lg" className="w-full" disabled={busy}>
                 {busy ? "Entrando…" : "Entrar"}
@@ -174,10 +176,9 @@ function LoginPage() {
               </div>
               <div className="field">
                 <Label htmlFor="signup-password">Senha</Label>
-                <Input
+                <PasswordInput
                   id="signup-password"
                   name="password"
-                  type="password"
                   autoComplete="new-password"
                   minLength={6}
                   required
@@ -185,10 +186,9 @@ function LoginPage() {
               </div>
               <div className="field">
                 <Label htmlFor="signup-confirm">Confirme a senha</Label>
-                <Input
+                <PasswordInput
                   id="signup-confirm"
                   name="confirm"
-                  type="password"
                   autoComplete="new-password"
                   minLength={6}
                   required

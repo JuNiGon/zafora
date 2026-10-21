@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import hero from "@/assets/editorial-hero.jpg";
-import editorial from "@/assets/brand-editorial.jpg";
+import storeBags from "@/assets/loja-bolsas.jpg";
 import { brand } from "@/data/config";
 import { pageHead } from "@/data/seo";
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,14 @@ function About() {
       </section>
 
       <section className="editorial-band">
-        <img src={editorial} alt="Linho, luz e natureza no editorial Záfora" loading="lazy" width={1536} height={1024} />
+        <img
+          className="store-photo store-photo--bags"
+          src={storeBags}
+          alt="Bolsas de festa e acessórios expostos na loja Záfora"
+          loading="lazy"
+          width={1086}
+          height={1448}
+        />
         <div className="editorial-copy">
           <span className="eyebrow">História e propósito</span>
           <h2>

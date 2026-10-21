@@ -150,8 +150,9 @@ a:focus-visible { outline: 2px solid var(--ring); outline-offset: 5px; }
 .nav-links a { padding:8px 0; border-bottom:1px solid transparent; }
 .nav-links a[data-status=active] { color:var(--primary); border-color:var(--primary); }
 .header-tools { justify-self:end; display:flex; align-items:center; gap:12px; }
-.hero { position:relative; height: min(650px, 72vh); min-height:510px; overflow:hidden; }
-.hero > img { position:absolute; width:100%; height:100%; object-fit:cover; object-position:center; }
+/* A altura acompanha a proporção da foto (1920×1024) para não cortar as modelos; limitada à altura da tela. */
+.hero { position:relative; height:min(calc(100vw * 1024 / 1920), calc(100vh - 120px)); min-height:510px; overflow:hidden; }
+.hero > img { position:absolute; width:100%; height:100%; object-fit:cover; object-position:center top; }
 .hero::after { content:""; position:absolute; inset:0; background:linear-gradient(90deg,var(--hero-wash),transparent 58%); }
 .hero-content { position:relative; z-index:1; padding-top:96px; }
 .eyebrow { font-size:10px; text-transform:uppercase; letter-spacing:2px; font-weight:500; }
@@ -230,6 +231,11 @@ a:focus-visible { outline: 2px solid var(--ring); outline-offset: 5px; }
 .search-input:focus { outline:2px solid var(--ring); outline-offset:2px; }
 .contact-layout { display:grid; grid-template-columns:1fr 1fr; gap:90px; padding-bottom:80px; }
 .contact-photo { width:100%; height:510px; object-fit:cover; }
+/* Fotos da loja (formato retrato) */
+.editorial-band > img.store-photo { height:720px; min-height:0; }
+.contact-photo.store-photo { height:620px; object-position:center 45%; }
+.store-photo--window { object-position:center 55%; }
+.store-photo--bags { object-position:center 20%; }
 .contact-copy { padding-block:30px; }
 .contact-copy h2 { font-size:35px; margin-bottom:20px; }
 .contact-copy > p { font-size:13px; line-height:1.9; margin-bottom:25px; }
@@ -239,7 +245,6 @@ a:focus-visible { outline: 2px solid var(--ring); outline-offset: 5px; }
 .mobile-menu-toggle { display:none; }
 .reveal { animation:fade-in .8s ease both; }
 @keyframes fade-in { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
-@media(min-width:1600px) { .hero { max-height:700px; } }
 @media(max-width:1000px) {
  .page-width { width:calc(100% - 56px); } .nav-links { gap:18px; } .site-header { height:80px; }
  .hero h1 { font-size:64px; } .hero-content { padding-top:88px; } .editorial-copy { padding:45px; }
@@ -269,6 +274,7 @@ a:focus-visible { outline: 2px solid var(--ring); outline-offset: 5px; }
  .catalog-tools { flex-direction:column; align-items:stretch; gap:15px; } .filters { gap:2px; } .sort-select { width:100%; }
  .product-detail { grid-template-columns:1fr; gap:20px; } .detail-copy { padding-top:10px; } .detail-copy h1 { font-size:42px; }
  .contact-layout { grid-template-columns:1fr; gap:25px; padding-bottom:35px; } .contact-photo { height:350px; }
+ .editorial-band > img.store-photo { min-height:0; height:440px; } .contact-photo.store-photo { height:440px; }
 }
 @media(max-width:640px) {
  .hero-content { padding-top:315px; }
@@ -398,3 +404,9 @@ a:focus-visible { outline: 2px solid var(--ring); outline-offset: 5px; }
  .admin-actions { justify-content:flex-start; margin-left:-10px; }
 }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+
+/* Campo de senha com botão mostrar/ocultar */
+.password-field { position:relative; }
+.password-toggle { position:absolute; right:4px; top:50%; transform:translateY(-50%); width:36px; height:32px; display:grid; place-items:center; color:var(--muted-foreground); border-radius:var(--radius); cursor:pointer; }
+.password-toggle:hover { color:var(--foreground); }
+.password-toggle:focus-visible { outline:2px solid var(--ring); outline-offset:1px; }

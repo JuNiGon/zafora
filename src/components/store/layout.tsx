@@ -12,7 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { brand } from "@/data/config";
+import { brand, whatsappUrl } from "@/data/config";
 import { useAuth } from "@/contexts/auth";
 import { useCart } from "@/contexts/cart";
 
@@ -110,6 +110,7 @@ export function Header() {
 }
 
 export function Footer() {
+  const whatsappLink = whatsappUrl("Olá! Vim pelo site da Záfora e gostaria de mais informações.");
   return (
     <footer className="footer">
       <div className="page-width footer-grid">
@@ -122,6 +123,11 @@ export function Footer() {
             <br />
             Vista o que faz sentido para você.
           </p>
+          <address className="footer-address">
+            <a href={brand.mapsUrl} target="_blank" rel="noopener noreferrer">
+              {brand.address}
+            </a>
+          </address>
         </div>
         <div>
           <h3>Explore</h3>
@@ -144,6 +150,11 @@ export function Footer() {
             <Link to="/contato">
               Fale com a Záfora <ArrowUpRight size={12} />
             </Link>
+            {whatsappLink && (
+              <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+                WhatsApp {brand.whatsappDisplay}
+              </a>
+            )}
           </div>
         </div>
         <div>
@@ -151,7 +162,7 @@ export function Footer() {
           <div className="footer-links">
             {brand.instagramUrl ? (
               <a href={brand.instagramUrl} target="_blank" rel="noopener noreferrer">
-                Instagram ↗
+                Instagram {brand.instagramHandle} ↗
               </a>
             ) : (
               <span className="demo-note">Instagram · em breve</span>

@@ -1,4 +1,13 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   createUserWithEmailAndPassword,
   getAdditionalUserInfo,
@@ -51,6 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  // Nome informado no cadastro enquanto a conta ainda está sendo criada.
+  const pendingName = useRef("");
 
   useEffect(() => {
     // Conclui um login com Google iniciado por redirecionamento (fallback do popup).
@@ -72,7 +83,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         })),
         checkIsAdmin(current.uid),
       ]);
-      // Logo após o cadastro, o perfil pode ainda não estar gravado: preserva o nome já conhecido.
+      // Logo após o cadastro o documento users/{uid} ainda pode não existir:
+      // usa o nome digitado no formulário em vez de cair no e-mail.
+      if (!userProfile.name && pendingName.current) userProfile.name = pendingName.current;
       setProfile((prev) =>
         prev && !userProfile.name ? { ...userProfile, name: prev.name } : userProfile,
       );
@@ -82,11 +95,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = useCallback(async (name: string, email: string, password: string) => {
-    const credential = await createUserWithEmailAndPassword(auth, email.trim(), password);
-    await updateProfile(credential.user, { displayName: name.trim() });
-    const data = { name: name.trim(), email: credential.user.email ?? email.trim(), phone: "" };
-    await saveUserProfile(credential.user.uid, data, true).catch(() => undefined);
-    setProfile(data);
+    const cleanName = name.trim();
+    pendingName.current = cleanName;
+    try {
+      const credential = await createUserWithEmailAndPassword(auth, email.trim(), password);
+      const data = { name: cleanName, email: credential.user.email ?? email.trim(), phone: "" };
+      setProfile(data);
+      // Grava o nome no Firebase Auth (displayName) e no Firestore (users/{uid}).
+      await updateProfile(credential.user, { displayName: cleanName });
+      await saveUserProfile(credential.user.uid, data, true).catch((error) =>
+        console.error("Não foi possível salvar o perfil no Firestore:", error),
+      );
+      setProfile(data);
+    } finally {
+      pendingName.current = "";
+    }
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
@@ -155,7 +178,7 @@ export function useAuth() {
 
 /** Nome amigável para exibição e para a mensagem do pedido. */
 export function displayName(user: User | null, profile: UserProfile | null) {
-  return profile?.name || user?.displayName || user?.email?.split("@")[0] || "";
+  return profile?.name || user?.displayName || "";
 }
 
 /** Traduz os códigos de erro do Firebase Auth para mensagens em português. */

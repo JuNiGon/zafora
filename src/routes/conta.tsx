@@ -48,17 +48,18 @@ function AccountPage() {
     <main className="page-width pb-20">
       <div className="page-intro">
         <span className="eyebrow">Área do cliente</span>
-        <h1>Olá, {name.split(" ")[0]}</h1>
+        <h1>Olá{name ? `, ${name.split(" ")[0]}` : ""}</h1>
         <p>Gerencie seus dados e acompanhe o seu carrinho.</p>
       </div>
 
       <div className="account-grid">
         <section className="panel">
           <h2>Seus dados</h2>
-          <form className="auth-form" onSubmit={handleSubmit}>
+          {/* key: recria o formulário quando o perfil termina de carregar */}
+          <form key={profile?.name ?? ""} className="auth-form" onSubmit={handleSubmit}>
             <div className="field">
               <Label htmlFor="account-name">Nome</Label>
-              <Input id="account-name" name="name" defaultValue={profile?.name ?? name} required minLength={2} />
+              <Input id="account-name" name="name" defaultValue={profile?.name || name} required minLength={2} />
             </div>
             <div className="field">
               <Label htmlFor="account-email">E-mail</Label>

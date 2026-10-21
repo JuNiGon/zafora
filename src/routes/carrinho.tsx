@@ -151,7 +151,7 @@ function CartPage() {
 
           {user ? (
             <p className="cart-customer">
-              Pedido em nome de <strong>{customerName}</strong>
+              Pedido em nome de <strong>{customerName || user.email}</strong>
             </p>
           ) : null}
 

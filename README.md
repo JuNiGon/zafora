@@ -198,7 +198,7 @@ src/
 
 ### Mensagem enviada ao WhatsApp
 
-Ao finalizar, o cliente é levado para `https://wa.me/5582988487506?text=…` com o texto codificado por `encodeURIComponent`:
+Ao finalizar, o cliente é levado para `https://wa.me/558293097204?text=…` com o texto codificado por `encodeURIComponent`:
 
 ```
 Olá, Záfora! Gostaria de finalizar o seguinte pedido:

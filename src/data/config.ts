@@ -1,16 +1,21 @@
 export const brand = {
   name: "ZÁFORA",
   /** Número do WhatsApp comercial: código do país + DDD + número, somente dígitos. */
-  whatsappNumber: "5582988487506",
-  instagramUrl: "",
+  whatsappNumber: "558293097204",
+  /** Número formatado para exibição no site. */
+  whatsappDisplay: "+55 82 9309-7204",
+  instagramUrl: "https://www.instagram.com/zaforamaceio/",
+  instagramHandle: "@zaforamaceio",
+  address: "Av. Comendador Gustavo Paiva, 2990 – Cruz das Almas, Maceió – AL",
+  mapsUrl:
+    "https://www.google.com/maps/search/?api=1&query=Av.+Comendador+Gustavo+Paiva,+2990,+Cruz+das+Almas,+Macei%C3%B3+-+AL",
   pinterestUrl: "",
   serviceHours: "",
   email: "",
   announcement: "Um novo olhar para o essencial. Conheça a coleção.",
-  story:
-    "A Záfora propõe um olhar sensível para o vestir: formas leves, texturas naturais e peças que deixam espaço para a sua personalidade. Uma identidade construída no encontro entre o essencial e o expressivo.",
+  story: "Frescor, sofisticação e estilo em cada detalhe.",
   history:
-    "Este espaço será dedicado à história real da Záfora: suas origens, quem está por trás da marca e o que inspira cada coleção. O conteúdo institucional será atualizado com as informações da marca.",
+    "A Záfora é uma loja de roupas requintada e cheia de estilo, nascida com o propósito de transmitir confiança, elegância e autenticidade a cada pessoa que veste nossas peças.",
 };
 
 /** Categorias exibidas nos filtros e no formulário de cadastro de produtos. */
